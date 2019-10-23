@@ -23,52 +23,45 @@ class mongoQueue:
     def Dequeue(self):
         print(self.coll_name)
         fetch_query = {'process_state':'Not Processed'}
+        self.results = self.coll.find_one(fetch_query)
+        return self.results
+
+    def getAllProcessing(self):
+        print(self.coll_name)
+        fetch_query = {'process_state':'Processing'}
         self.results = self.coll.find(fetch_query)
         return self.results
+    
+    def getAllProcessed(self):
+        print(self.coll_name)
+        fetch_query = {'process_state':'Processed'}
+        self.results = self.coll.find(fetch_query)
+        return self.results
+    
+    def setAsProcessing(self,objectId):
+        print('ObjectId to be set as Processing::',objectId)
+        # self.results = self.coll.find_one_and_update(query={"_id":objectId},update={"$set": {"process_state": "Processing"}})
+        self.results = self.coll.find_one_and_update({"_id":objectId},{"$set": {"process_state": "Processing"}})
+        # self.results = self.coll.update_one({"_id": objectId}, {"$set": {"process_state": "Processing"}})
+        print(self.results)
+        return self.results  
+
+
+    def setAsProcessed(self,objectId):
+        print('ObjectId to be set as Processed::',objectId)
+        self.results = self.coll.find_one_and_update({"_id":objectId},{"$set": {"process_state": "Processed"}})
+        return self.results        
+
+
 
 
 #%%
-        
-
-# class fetchingQuery:
-#     def process_sets(self, db, coll, query):
-#         self.results = coll.find(query)
-#         return self.results
-#     def fetch_serverNames(self, db, coll):
-#         self.resp = coll.find()
-#         return self.resp
-#     def filter_query(self, db, coll, q1, q2):
-#         self.results = coll.find(q1, q2)
-#         return self.results
+# coll_name = 'fetch_list'
+# mq = mongoQueue(coll_name)
+# x =mq.Dequeue()
+# y = mq.getAllProcessing()
 
 
-# class DeleteData:
-#     def remove_data(self, db, coll, query):
-#         self.results = coll.remove(query)
-#         return self.results
 
-# def insert_data(query, collection):
-#     c_db = settingupDb(query, collection)
-#     coll = c_db.construct_Db()
-#     c_db.push_into_db(DB, coll, query)
-
-# def fetchData(collection, query):
-#     c_db = settingupDb(query, collection)
-#     coll = c_db.construct_Db()
-#     f_db = fetchingQuery()
-#     res = f_db.process_sets(DB, coll, query)
-#     return res
-
-# def filteredData(collection, q1, q2):
-#     c_db = settingupDb(q1, collection)
-#     coll = c_db.construct_Db()
-#     f_db = fetchingQuery()
-#     res = f_db.filter_query(DB, coll, q1, q2)
-#     return res
-
-# def update_info(query, newVal, collection):
-#     c_db = settingupDb(query, collection)
-#     coll = c_db.construct_Db()
-#     c_db.updates_info(DB, coll, query, newVal)
 
 #%%
