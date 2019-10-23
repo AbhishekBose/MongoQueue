@@ -1,0 +1,2 @@
+MONGO_DB_NAME = 'C3_python_dev'
+MONGO_DB_URL = 'localhost'
