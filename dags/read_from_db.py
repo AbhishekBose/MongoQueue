@@ -11,9 +11,13 @@ from airflow.operators.python_operator import PythonOperator
 #%%
 
 def fetch_data_to_process():
-    q = mongoQueue('fetch_list')
-    data_to_process = q.Dequeue()
-    return data_to_process
+    q = mongoQueue('fetch_list','statuses')
+    vehicle_detector_status = q.get_vehicle_detector_status()['Working']
+    if vehicle_detector_status:
+        data_to_process = q.Dequeue()
+        return data_to_process
+    else:
+        return 'Vehicle Detector still processing videos'
 # %%
 
 dag = DAG('read_from_db', description='Read not processed video list from DB',
