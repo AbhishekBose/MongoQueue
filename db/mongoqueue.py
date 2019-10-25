@@ -12,9 +12,10 @@ DB = CLIENT[MONGO_DB_NAME]
 
 #%%
 class mongoQueue:
-    def __init__(self,coll_name):
+    def __init__(self,coll_name,status_coll_name):
         self.coll = DB[coll_name]
         self.coll_name = coll_name
+        self.status_coll = DB[status_coll_name]
 
     def Enqueue(self,coll,query):
         self.eq_id = coll.insert(query,check_keys=False)
@@ -38,6 +39,13 @@ class mongoQueue:
         self.results = self.coll.find(fetch_query)
         return self.results
     
+    def get_vehicle_detector_status(self):
+        print('Status collection is::: ',self.status_coll)
+        status_query = {'Process_Name':'Vehicle_Detection'}
+        self.status_result = self.status_coll.find(status_query)
+        return self.status_result
+
+        
     def setAsProcessing(self,objectId):
         print('ObjectId to be set as Processing::',objectId)
         # self.results = self.coll.find_one_and_update(query={"_id":objectId},update={"$set": {"process_state": "Processing"}})
